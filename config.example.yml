@@ -1,0 +1,70 @@
+enabled:
+  - neutron
+
+projects:
+  neutron:
+    hosts:
+      enabled:    
+      - ctl
+      - cmp
+      - net
+      disabled:
+      - ctl[1:]
+
+    conf_dirs:
+    - usr/share/neutron
+
+    code_dirs:
+    - neutron
+    #- neutron_lbaas
+    - neutron_vpnaas
+    #- neutron_fwaas
+    #- neutronclient
+
+    services:
+    - neutron-server
+    - neutron-vpn-agent
+    - neutron-l3-agent
+    - neutron-lbaasv2-agent
+
+  nova:
+    code_dirs:
+    - nova
+    - novaclient
+    services:
+    - openstack-nova-api
+    - openstack-nova-cert
+    - openstack-nova-console
+    - openstack-nova-consoleauth
+    - openstack-nova-compute
+    - openstack-nova-conductor
+    - openstack-nova-novncproxy
+    - openstack-nova-serialproxy
+    - openstack-nova-scheduler
+
+  cinder:
+    code_dirs:
+    - cinder
+    - cinderclient
+    services:
+    - openstack-cinder-api
+    - openstack-cinder-scheduler
+    - openstack-cinder-volume
+
+  manila:
+    code_dirs:
+    - manila
+    - manilaclient
+
+    services:
+    - openstack-manila-api 
+    - openstack-manila-scheduler
+    - openstack-manila-share
+
+work_dir: /home/codes
+site_pkgs_dir: /usr/lib/python2.7/site-packages/
+service_restart_cmd: |
+  serv_name="%(serv_name)s"
+  if systemctl is-enabled $serv_name &>/dev/null; then
+    systemctl restart $serv_name || exit 1
+  fi

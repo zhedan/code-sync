@@ -1,0 +1,6 @@
+flake8==2.2.4
+hacking<0.11,>=0.10.0
+pyflakes==0.8.1
+mccabe==0.2.1
+pep8==1.5.7
+

@@ -1,0 +1,17 @@
+#!/bin/bash
+HOME_DIR=/home/code-sync
+
+IGNORE_CHECKS='E125,E126,E128,E129,E265,H305,H404,H405,W504,N321'
+EXTRA_IGNORE_CHECKS='H301,E122'
+BUILTINS='_'
+EXCLUDE='./.*,build,dist,neutron/openstack/common/*,neutron/tests/tempest'
+
+function main() {
+  source $HOME_DIR/venv/bin/activate || exit 1
+
+  IGNORE_CHECKS="$IGNORE_CHECKS,$EXTRA_IGNORE_CHECKS"
+  flake8 --ignore "$IGNORE_CHECKS" --builtins="$BUILTINS" \
+    --exclude=$EXCLUDE --show-source $@
+}
+
+main $@

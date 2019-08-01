@@ -1,0 +1,37 @@
+#!/bin/bash
+HOME_DIR=/home/code-sync/
+
+function init_env(){
+  shift
+  local work_dir=$1 
+  if [ x"$work_dir" == x ]; then
+    echo 1>&2 "must provide work_dir"
+    exit 1
+  fi
+
+  cp $HOME_DIR/config.example.yml $work_dir/config.yml
+}
+
+function code_sync() {
+  local work_dir=$1 
+  if [ x"$work_dir" == x ]; then
+    echo 1>&2 "must provide work_dir"
+    exit 1
+  fi
+
+  python $HOME_DIR/update.py $work_dir
+}
+
+function main() {
+  local action=$1
+  
+  case $action in 
+    init)
+      init_env $@
+      ;;
+    *)
+      code_sync $@
+  esac
+}
+
+main $@
